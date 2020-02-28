@@ -10,13 +10,13 @@ volumes: [
 
     node(label) {
         stage('Build') {
-            git credentialsId: 'bitbucket-cloud', url: 'https://dtommeke@bitbucket.org/dtommeke/jenkins-kubernetesbuild.git'
-            container('python3') {
-                stage('Running tests') {
-                    sh 'pip install -r requirements.txt'
-                    sh 'python manage.py test'
-                }
-            }
+            //git credentialsId: 'bitbucket-cloud', url: 'https://dtommeke@bitbucket.org/dtommeke/jenkins-kubernetesbuild.git'
+            //container('python3') {
+            //    stage('Running tests') {
+            //        sh 'pip install -r requirements.txt'
+            //        sh 'python manage.py test'
+            //    }
+            //}
             container('docker') {
                 stage('Building docker image') {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding',
@@ -25,8 +25,8 @@ volumes: [
                     passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
                     sh """
                         docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-                        docker build -t tomdierckx/python-django-ci-testapp:${BUILD_NUMBER} .
-                        docker push tomdierckx/python-django-ci-testapp:${BUILD_NUMBER}
+                        docker build -t otterwerks/python-django-ci-testapp:${BUILD_NUMBER} .
+                        docker push otterwerks/python-django-ci-testapp:${BUILD_NUMBER}
                         """
                     }
                 }
